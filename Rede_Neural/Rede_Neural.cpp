@@ -16,10 +16,10 @@ void degrauUnitario();
 
 struct criarNeuronio {
     int numero;
-    int entrada[10000];
+    float entrada[10000];
     int peso[10000];
     int camada;
-    int funcaoAtivacao;
+   // int funcaoAtivacao;
     float saida;
 
 };
@@ -33,57 +33,64 @@ void criarNeuronio() {
         *neural[contador].entrada = entradaOrigem[i];
         neural->camada = 1;
         degrauUnitario();
+
         contador++;
     }
     for (i = 0; i < config[1]; i++) {
-        neural->numero = contador;
-        int temp = 0;
+       int temp = contador;
         for (i = 0; i < config[0]; i++) {
-            *neural[contador].entrada = neural[i].saida;// nas entradas recebe as saidas da camada 1
+            neural->numero = contador;
+            
+            *neural[temp].entrada = neural[i].saida;// nas entradas recebe as saidas da camada 1
+            neural->camada = 2;
+            degrauUnitario();
+            contador++;
         }
-        neural->camada = 2;
-        degrauUnitario();
-        contador++;
+        
     }
     for (i = 0; i < config[2]; i++) {
-        neural->numero = contador;
-        int temp = 0;
+        int temp = contador;
         for (i = 0; i < config[1]; i++) {
-            *neural[contador].entrada = neural[i + config[0]].saida;// nas entradas recebe as saidas da camada 2
+            neural->numero = contador;
+
+            *neural[temp].entrada = neural[i].saida;// nas entradas recebe as saidas da camada 1
+            neural->camada = 3;
+            degrauUnitario();
+            contador++;
         }
-        neural->camada = 3;
-        degrauUnitario();
-        contador++;
     }
     for (i = 0; i < config[3]; i++) {
-        neural->numero = contador;
-        int temp = 0;
+        int temp = contador;
         for (i = 0; i < config[2]; i++) {
-            *neural[contador].entrada = neural[i + config[1]].saida;// nas entradas recebe as saidas da camada 3
+            neural->numero = contador;
+
+            *neural[temp].entrada = neural[i].saida;// nas entradas recebe as saidas da camada 1
+            neural->camada = 4;
+            degrauUnitario();
+            contador++;
         }
-        neural->camada = 4;
-        degrauUnitario();
-        contador++;
     }
     for (i = 0; i < config[4]; i++) {
-        neural->numero = contador;
-        int temp = 0;
-        for (i = 0; i < config[2]; i++) {
-            *neural[contador].entrada = neural[i + config[2]].saida;// nas entradas recebe as saidas da camada 4
+        int temp = contador;
+        for (i = 0; i < config[3]; i++) {
+            neural->numero = contador;
+
+            *neural[temp].entrada = neural[i].saida;// nas entradas recebe as saidas da camada 1
+            neural->camada = 5;
+            degrauUnitario();
+            contador++;
         }
-        neural->camada = 5;
-        degrauUnitario();
-        contador++;
     }
     for (i = 0; i < config[5]; i++) {
-        neural->numero = contador;
-        int temp = 0;
-        for (i = 0; i < config[2]; i++) {
-            *neural[contador].entrada = neural[i + config[3]].saida;// nas entradas recebe as saidas da camada 5
+        int temp = contador;
+        for (i = 0; i < config[4]; i++) {
+            neural->numero = contador;
+
+            *neural[temp].entrada = neural[i].saida;// nas entradas recebe as saidas da camada 1
+            neural->camada = 6;
+            degrauUnitario();
+            contador++;
         }
-        neural->camada = 6;
-        degrauUnitario();
-        contador++;
     }
 
 }
@@ -107,8 +114,7 @@ void treinamentoRede() {
 }
 
 void regraDelta() {
-
-    
+    delta[i] = taxaAprendizagem * *neural->peso;
 }
 
 void degrauUnitario() {//função de degrau unitario
@@ -131,6 +137,7 @@ void degrauUnitario() {//função de degrau unitario
 
 
 void usoRede() {
+    criarNeuronio();
     printf_s("Ainda não fiz!");
 }
 void teste() {
