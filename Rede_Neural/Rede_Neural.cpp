@@ -9,11 +9,15 @@ int i, j;
 int entradaOrigem[100] = { 0, 1, 1, 1, 1, 0, 0, 0 ,0}; // dados a serem alimentados nos modelos
 int camada;
 int config[6]; //configuração dos neuronios por camada
+float delta[10000];
+float taxaAprendizagem;
+
+void degrauUnitario();
 
 struct criarNeuronio {
     int numero;
-    char entrada[10000];
-    char peso[10000];
+    int entrada[10000];
+    int peso[10000];
     int camada;
     int funcaoAtivacao;
     float saida;
@@ -95,8 +99,16 @@ void treinamentoRede() {
         scanf_s("%i", &x);                                                     //entrada do numero de nerônios por camada
         config[i] = x;
     }
+    printf("Digite a taxa de aprendizagem! \n");
+    scanf_s("%f", &taxaAprendizagem);
+
     criarNeuronio();
 
+}
+
+void regraDelta() {
+
+    
 }
 
 void degrauUnitario() {//função de degrau unitario
@@ -126,6 +138,7 @@ void teste() {
     {
         printf_s("%d",i);
         printf_s(" teste %s \n", neural->numero);
+        printf("%s", neural->saida);
     }
 }
 
