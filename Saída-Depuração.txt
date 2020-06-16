@@ -1,0 +1,11 @@
+﻿"Rede_Neural.exe" (Win32): Carregado "C:\Users\eduar\source\repos\Rede_Neural\Debug\Rede_Neural.exe". Símbolos carregados.
+"Rede_Neural.exe" (Win32): Carregado "C:\Windows\SysWOW64\ntdll.dll". 
+"Rede_Neural.exe" (Win32): Carregado "C:\Windows\SysWOW64\kernel32.dll". 
+"Rede_Neural.exe" (Win32): Carregado "C:\Windows\SysWOW64\KernelBase.dll". 
+"Rede_Neural.exe" (Win32): Carregado "C:\Windows\SysWOW64\vcruntime140d.dll". 
+"Rede_Neural.exe" (Win32): Carregado "C:\Windows\SysWOW64\ucrtbased.dll". 
+O thread 0x42b0 foi fechado com o código 0 (0x0).
+O thread 0x42e0 foi fechado com o código -1073741749 (0xc000004b).
+O thread 0x4584 foi fechado com o código -1073741510 (0xc000013a).
+O thread 0x1034 foi fechado com o código -1073741510 (0xc000013a).
+O programa "[14728] Rede_Neural.exe" foi fechado com o código -1073741510 (0xc000013a).
