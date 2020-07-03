@@ -1,29 +1,33 @@
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <conio.h>
 #include <time.h>
 #include <locale.h>
 
 
 int i, j;
-int tamanhoEntrada = 100;// substituir na entrada origem o tamanho de entrada
+//int tamanhoEntrada = 100;// substituir na entrada origem o tamanho de entrada
 // entradas de alimentação de 0.1 == preto e 0.9 == branco manter apenas os dois.
 float entradaOrigem[100] = { 0.0, 0.1, 0.1, 0.1, 0.9, 0.9, 0.9, 0.1, 0.1, 0.1, 0.1, 0.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.9, 0.1, 0.1, 0.1, 0.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.9, 0.1, 0.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9 }; // dados a serem alimentados nos modelos
 char nomeTipoTreinamento[40];
 int camadaSelecao;
-int config[5]; //configuração dos neuronios por camada
+int config[6]; //configuração dos neuronios por camada
 float delta[5000];
 float taxaAprendizagem;
 float teste2;
 
-void degrauUnitario();
+
+void criarNeuronio();
+void inserirPesos();
 void alimentacaoRede();
+void degrauUnitario();
 void teste();
 
 struct criarNeuronio {
     int numero;
-    float entrada[500] = { NULL };
-    int peso[500];
+    float entrada[5000] = { NULL };
+    float peso[5000];
     int camada;
    // int funcaoAtivacao;
     float saida;
@@ -34,56 +38,37 @@ struct criarNeuronio neural[49500]; // valor maximo 49.500 posições permitido 
 
 void criarNeuronio() { // separar alientação de rede em uma função separada... 
     int contador = 0;
-    int k;
+    int i, j;
+    for ( i = 0; i < 6; i++ ){
+        for ( j = 0; j < config[i]; j++ ) {
+            neural[contador].numero = contador;
+            neural[contador].camada = i+1 ;
+            contador++;
+        }
+    }
 
-    for (i = 0; i < config[0]; i++) {   // para a primeira camada recebe a entrada e alimentação
-        neural[contador].numero = contador;
-        neural[contador].camada = 1;
-        contador++;
-        teste2 = *neural[contador].entrada;// teste
-    }
-    for (i = 0; i < config[1]; i++) {
-        neural[contador].numero = contador; 
-        neural[contador].camada = 2;
-        contador++;
-        teste2 = *neural[contador].entrada;//teste
-    }
-    for (i = 0; i < config[2]; i++) {
-        neural[contador].numero = contador;
-        neural[contador].camada = 3;
-        contador++;
-    }
-    for (i = 0; i < config[3]; i++) {
-        neural[contador].numero = contador;
-        neural[contador].camada = 4;
-        contador++;
-        teste2 = *neural[contador].entrada;//teste
-    }
-    for (i = 0; i < config[4]; i++) {
-        neural[contador].numero = contador;
-        neural->camada = 5;
-        contador++;
-        teste2 = *neural[contador].entrada;//teste
-    }
-    
 }
 
 void inserirPesos() {
     /* inicializar o gerador de números aleatórios */
-    int i, k =0;
+    int i, l, k =0;
+    int soma;
     srand( time( NULL ) );
-    for ( i = 0; i < (config[0] + config[1] + config[2] + config[3] + config[4] + config[5]); i++ ){
-        if ( neural[i].camada == 1 ) {
-            for ( j = 0; j < tamanhoEntrada; j++ ) {// trata a primeira camada
-                neural[i].peso[j] = rand() % 10; // valor de maximo dos numeros aleatorios.
+    soma = config[0] + config[1] + config[2] + config[3] + config[4] + config[5];
+    for ( i = 0; i < soma; i++ ){
+        for ( l = 0; l < config[0]; l++ ){
+            neural[l].peso[j] = rand() % 10; // valor de maximo dos numeros aleatorios.
+            neural[l].peso[j] = neural[l].peso[j] / 10;
+        }
+        if ( neural[i].camada > 1 ){
+            for ( k = 0; k < 6; k++ ){
+                for ( l = 0; l < config[k]; l++ ) {
+                    neural[i].peso[l] = rand() % 10; // valor de maximo dos numeros aleatorios.
+                    neural[i].peso[l] = neural[i].peso[l] / 10;
+                }
             }
         }
-        else{
-            for ( j = 0; j < config[k]; j++ ) { // trata da segunda camada pra cima 
-                neural[i].peso[j] = rand() % 10;
-            }
-            k++;
-        }
+        
     }
 }
 
@@ -101,6 +86,9 @@ void treinamentoRede() {
     for ( i = 0; i < camadaSelecao; i++)  {
         printf("Digite a quantidade de neuronios na camada %i!\n",i+1);
         printf("Você tem mais um total de %i neuronios !\n", temp);
+        if ( i ==  0){
+            printf( "A Primeira camada deve ter o tamanho da quantidade de alimentação desejada! (exemplo 100)\n" );
+        }
         int x;
         scanf_s("%i", &x);                                                     //entrada do numero de nerônios por camada
         config[i] = x;
@@ -112,57 +100,54 @@ void treinamentoRede() {
     criarNeuronio();
     inserirPesos();
     alimentacaoRede();
-    
+   
 }
 
 void alimentacaoRede() {
-    for ( i = 0; i < (config[0] + config[1] + config[2] + config[3] + config[4] + config[5]); i++ ) {
         int k;
-        int cont = 0;
-        for ( j = 0; j < config[0]; j++ ) {
-             for ( k = 0; k < tamanhoEntrada; k++ ) { //variavel global da quantidade de entradas pro neuronio
-                neural[cont].entrada[k] = entradaOrigem[k];
-                cont++;
-            }
-            degrauUnitario();
+        int cont0 = 0;
+        for ( j = 0; j < config[0]; j++ ) {// a primeira camada sempre tem a quantidade definida de acordo com a entrada de aliemntação 
+            neural[cont0].entrada[0] = entradaOrigem[j];
+        cont0++;        
         }
+        degrauUnitario();
         for ( j = 0; j < config[1]; j++ ) {
             for ( k = 0; k < config[0]; k++ ) {// repete a mesma quantidade de neuronios da primeira camada para que casa saida seja uma posição no vetor de entrada
-                neural[cont].entrada[k] = neural[k].saida;// nas entradas da segunda camada recebe as saidas da camada 1
-                cont++;
+                neural[cont0].entrada[k] = neural[k].saida;// nas entradas da segunda camada recebe as saidas da camada 1
             }
-            degrauUnitario();
+            cont0++;           
         }
+        degrauUnitario();
         for ( j = 0; j < config[2]; j++ ) {
             for ( k = 0; k < config[1]; k++ ) {// repete a mesma quantidade de neuronios da segunda camada para que casa saida seja uma posição no vetor de entrada
-                *neural[cont].entrada = neural[cont - config[1]].saida;// nas entradas recebe as saidas da camada 1   
-                cont++;
-            }
-            degrauUnitario();
+                neural[cont0].entrada[k] = neural[cont0 - config[1]].saida;// nas entradas recebe as saidas da camada 1   
+            }    
+            cont0++;           
         }
+        degrauUnitario();
         for ( j = 0; j < config[3]; j++ ) {
             for ( k = 0; k < config[2]; k++ ) {// repete a mesma quantidade de neuronios da terceira camada para que casa saida seja uma posição no vetor de entrada
-                *neural[cont].entrada = neural[cont - config[2]].saida;// nas entradas recebe as saidas da camada 1
-                cont++;
+                neural[cont0].entrada[k] = neural[cont0 - config[2]].saida;// nas entradas recebe as saidas da camada 1
             }
-            degrauUnitario();
+            cont0++;           
         }
+        degrauUnitario();
         for ( j = 0; j < config[4]; j++ ) {
             for ( k = 0; k < config[3]; k++ ) {// repete a mesma quantidade de neuronios da quarta camada para que casa saida seja uma posição no vetor de entrada
-                *neural[cont].entrada = neural[cont - config[3]].saida;// nas entradas recebe as saidas da camada 1
-                cont++;
+                neural[cont0].entrada[k] = neural[cont0 - config[3]].saida;// nas entradas recebe as saidas da camada 1  
             }
-            degrauUnitario();
+            cont0++;          
         }
-       
-    }
+        degrauUnitario();
 }
 
 void regraDelta() {
     int e1 = 0;             // diferença entre a saida desejada e a saida obtida
     int o1 = 0;                 //saida desejada
     e1 = o1 - neural->saida;
-    delta[i] = taxaAprendizagem * *neural->peso * e1;
+    delta[i] = taxaAprendizagem * *neural->peso * e1; //verificar a ultima camada e fazer correção 
+
+    // verificar media e correção da ccamada oculta
 }
 
 void degrauUnitario() {//função de degrau unitario
@@ -172,38 +157,33 @@ void degrauUnitario() {//função de degrau unitario
     int l;
     for (l = 0; l < config[0] + config[1] + config[2] + config[3] + config[4] + config[5]; l++) {
         if (neural[l].camada == 1) {
-            temp = 0;
-            cont = 0;
-            for (j = 0; j < tamanhoEntrada; j++) {//destingue a entrada externa para o calculo
-                temp = temp + (neural[l].entrada[j] * neural[l].peso[j]);
-                cont++;
+                func01 =  (neural[l].entrada[0] * neural[l].peso[0]);
+                if (func01 < 0.5) {
+                    func01 = 0.1;
+                }
+                else {
+                    func01 = 0.9;
+                }
+                neural[l].saida = func01;// ver pq não esta indo valor para saida
             }
-            func01 = (temp / cont);
-            if (func01 < 0.5) {
-                func01 = 0.1;
+        
+        for (  i = 0; i < 6; i++ ){
+            if ( neural[l].camada == i + 2 ) {
+                temp = 0;
+                for ( j = 0; j < config[i]; j++ ) {//destingue a entrada externa para o calculo
+                    temp = temp + (neural[l].entrada[j] * neural[l].peso[j]);
+                }
+                func01 = temp;
+                if ( func01 < 0.5 ) {
+                    func01 = 0.1;
+                }
+                else {
+                    func01 = 0.9;
+                }
+                neural[l].saida = func01;// ver pq não esta indo valor para saida
             }
-            else {
-                func01 = 0.9;
-            }
-            neural[l].saida = func01;// ver pq não esta indo valor para saida
         }
-        else
-        {
-            temp = 0;
-            cont = 0;
-            for (j = 0; j < sizeof config[-2 + neural[l].camada]; j++) {// contabiliza as saidas da primeira camada o calculo
-                temp = temp + (neural[l].entrada[j] * neural[l].peso[j]);
-                cont++;
-            }
-            func01 = (temp / cont);
-            if (func01 < 0.5) {
-                func01 = 0.1;
-            }
-            else {
-                func01 = 0.9;
-            }
-            neural[l].saida = func01;
-        }
+       
     }
 }
 
@@ -259,4 +239,3 @@ int main() {
 
     }
 }
-
